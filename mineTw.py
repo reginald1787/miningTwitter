@@ -11,11 +11,7 @@ import matplotlib.pylab as plt
 # on Twitter's OAuth implementation.
 
 def accessAccount():
-	CONSUMER_KEY = 'tQXKXRRJWlVhxn5qCo41DCKQ0'
-	CONSUMER_SECRET = '51o0eOBfZpSpkqumoXYCXshVga6CceeVUtcR6efOBb4KOHKOev'
-	OAUTH_TOKEN = '471721876-jz0K6fANITvQ0GkIiXvbpImzbmlDO3VafYHzFhNt'
-	OAUTH_TOKEN_SECRET = 'SKrZtZT1bIbXUhf8ZoAYkNgkKkrmjyvjliecFJTeMqKEC'
-
+	
 	auth = twitter.oauth.OAuth(OAUTH_TOKEN, OAUTH_TOKEN_SECRET,
 	                           CONSUMER_KEY, CONSUMER_SECRET)
 
@@ -131,9 +127,9 @@ def extract():
 	print json.dumps(hashtags[0:5], indent=1)
 	print json.dumps(words[0:5], indent=1)
 
-def quercia():
+
 	twitter_api = accessAccount()
-	timeline = twitter_api.statuses.user_timeline(screen_name='danielequercia',count=200)
+	
 	#print timeline[0]
 	texts = [status['text'] for status in timeline]
 	dates = [status['created_at'] for status in timeline]
@@ -178,4 +174,3 @@ def quercia():
 
 
 if __name__ == '__main__':
-	quercia()
