@@ -1,8 +1,9 @@
 import twitter
 import json
-
-
-
+import pandas as pd
+import numpy as np
+from collections import Counter
+import matplotlib.pylab as plt
 # XXX: Go to http://dev.twitter.com/apps/new to create an app and get values
 # for these credentials, which you'll need to provide in place of these
 # empty string values that are defined as placeholders.
@@ -120,6 +121,9 @@ def extract():
           for t in status_texts 
               for w in t.split() ]
 
+
+
+
 	# Explore the first 5 items for each...
 
 	print json.dumps(status_texts[0:5], indent=1)
@@ -127,5 +131,51 @@ def extract():
 	print json.dumps(hashtags[0:5], indent=1)
 	print json.dumps(words[0:5], indent=1)
 
+def quercia():
+	twitter_api = accessAccount()
+	timeline = twitter_api.statuses.user_timeline(screen_name='danielequercia',count=200)
+	#print timeline[0]
+	texts = [status['text'] for status in timeline]
+	dates = [status['created_at'] for status in timeline]
+	X = []
+	Y = []
+	for date in dates:
+		time = date.split()
+		day = ' '.join(time[:3])
+		hour = int(time[3][:2])
+		X.append(day)
+		Y.append(hour)
+
+	dic = {}
+	nx = []
+	i=40
+	for x in X:
+		if x not in dic:
+			dic[x] = i
+			nx.append(i)
+			i-=1
+		else:
+			nx.append(dic[x])
+
+	xy = zip(nx,Y)
+	Z = Counter(xy).most_common()
+	d = []
+	for z in Z:
+		x = z[0][0]
+		y = z[0][1]
+		num = z[1]
+		d.append([x,y,num])
+	d = np.array(d)
+
+	ax=plt.subplot(111,polar=True)
+	c=plt.scatter(d[:,0],d[:,1],c=d[:,2],s=5*d[:2],cmap=plt.cm.hsv)
+	plt.colorbar()
+	c.set_alpha(0.5)
+	plt.axis([1,40,1,24])
+	plt.grid(True)
+	plt.show()
+
+
+
 if __name__ == '__main__':
-	extract()
+	quercia()
